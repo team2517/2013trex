@@ -26,9 +26,7 @@ class DefaultRobot: public SimpleRobot {
 	double outB;
 	double outC;
 	double outD;
-	bool button3Pressed;
-	bool button2Pressed;
-	bool lifterStart;
+	
 public:
 	DefaultRobot(void) :
 		/*
@@ -94,9 +92,7 @@ public:
 		
 		Watchdog().Feed();
 		maxPower = 275;
-		button3Pressed = false;
-		button2Pressed = false;
-		lifterStart = false;
+		
 		
 		while (IsOperatorControl()) {
 			if(-.1 < joystick.GetRawAxis(3) && (joystick.GetRawAxis(3) < .1)){
