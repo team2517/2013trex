@@ -11,24 +11,12 @@ class DefaultRobot: public SimpleRobot {
 	CANJaguar jagB;
 	CANJaguar jagC;
 	CANJaguar jagD;
-	CANJaguar jagWindowMotor;
-	CANJaguar shootFront;
-	CANJaguar shootRear;
-	Solenoid suctionA;
-	Solenoid suctionB;
-	Solenoid loaderA;
-	Solenoid loaderB;
-	Solenoid hopperGateA;
-	Solenoid hopperGateB;
-	Solenoid lifterA;
-	Solenoid lifterB;
 	AnalogChannel encoder;
 	AnalogChannel pValue;
 	AnalogChannel iValue;
 	AnalogChannel dValue;
 	Compressor compressor;
-	Timer timer;
-	int lifterStep;
+	int maxPower;
 	double theta;
 	double radius;
 	double phi;
@@ -38,13 +26,6 @@ class DefaultRobot: public SimpleRobot {
 	double outB;
 	double outC;
 	double outD;
-	double shooterSpeed;
-	double armPosition;
-	double targetPosition;
-	double armPositionTrans;
-	double targetSpeed;
-	double motorSpeed;
-	double maxPower;
 	bool button3Pressed;
 	bool button2Pressed;
 	bool lifterStart;
@@ -65,17 +46,6 @@ public:
 		jagB(10), //invert
 		jagC(6), 
 		jagD(3),
-		jagWindowMotor(4),
-		shootFront(7),
-		shootRear(2),
-		suctionA(1),
-		suctionB(2),
-		loaderA(3),
-		loaderB(4),
-		hopperGateA(5),
-		hopperGateB(6),
-		lifterA(7),
-		lifterB(8),
 		encoder(1),
 		pValue(2),
 		iValue(3),
@@ -94,7 +64,6 @@ public:
 
 	void OperatorControl(void) {
 		Watchdog().SetEnabled(true);
-		timer.Start();
 		DriverStationLCD *dsLCD = DriverStationLCD::GetInstance();
 		double ptemp=3.0;
 		double itemp=0.0;
@@ -124,9 +93,7 @@ public:
 		jagD.EnableControl();
 		
 		Watchdog().Feed();
-		shooterSpeed = 0.0;
 		maxPower = 275;
-		lifterStep = 0;
 		button3Pressed = false;
 		button2Pressed = false;
 		lifterStart = false;
@@ -275,7 +242,6 @@ public:
 			//dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "pTemp: %f", ptemp);
 			//dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "iTemp: %f", itemp);
 			//dsLCD->Printf(DriverStationLCD::kUser_Line6, 1, "dTemp: %f", dtemp);
-			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Throttle: %f", shooterSpeed);
 			dsLCD->UpdateLCD();
 			Watchdog().Feed();
 		}
