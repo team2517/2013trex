@@ -2,6 +2,8 @@
 #include "Math.h"
 #define PI 3.14159265
 
+//Remote system processor 5200?
+
 float normalizePower(float);
 
 class DefaultRobot : public SimpleRobot {
@@ -11,10 +13,6 @@ class DefaultRobot : public SimpleRobot {
 	CANJaguar jagB;
 	CANJaguar jagC;
 	CANJaguar jagD;
-	AnalogChannel encoder;
-	AnalogChannel pValue;
-	AnalogChannel iValue;
-	AnalogChannel dValue;
 	Solenoid tiltA; //Pneumatic at the base of the arm that controls tilt.	
 	Solenoid tiltB;
 	Solenoid liftA; //The pneuamtic at the first joint that controls lift.	
@@ -49,10 +47,6 @@ public:
 				jagB(2), //invert
 				jagC(30), 
 				jagD(45), 
-				encoder(1), 
-				pValue(2), 
-				iValue(3), 
-				dValue(4),
 				compressor(1, 1), 
 				tiltA(1), 
 				tiltB(2), 
