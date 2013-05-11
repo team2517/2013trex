@@ -1,15 +1,8 @@
 #include "WPIlib.h"
 #include "Math.h"
-#include <time.h>
 #define PI 3.14159265
 
-#define CAN_LIFT 			true //The lift can move legally.
-#define NO_LIFT 			false//The lift can't move legally.
-#define CAN_TILT			true //The tilt can move legaly.
-#define NO_TILT				false//The tilt can't move legaly
-
 float normalizePower(float);
-
 
 class DefaultRobot : public SimpleRobot {
 	Joystick joystick;
@@ -85,9 +78,6 @@ public:
 		
 
 		Watchdog().Feed();
-
-		bool liftok= CAN_LIFT;
-		bool tiltok= CAN_TILT;
 
 		while (IsOperatorControl()) 
 		{
