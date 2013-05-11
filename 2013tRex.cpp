@@ -54,20 +54,32 @@ public:
 				armControl(2),
 				jagA(5), //invert
 				jagB(2), //invert
-				jagC(30), jagD(45), encoder(1), pValue(2), iValue(3), dValue(4),
-				compressor(1, 1), tiltA(1), tiltB(2), liftA(3), liftB(4),
-				clampA(5), clampB(6)
+				jagC(30), 
+				jagD(45), 
+				encoder(1), 
+				pValue(2), 
+				iValue(3), 
+				dValue(4),
+				compressor(1, 1), 
+				tiltA(1), 
+				tiltB(2), 
+				liftA(3), 
+				liftB(4),
+				clampA(5), 
+				clampB(6)
 
 	{
 		Watchdog().SetExpiration(1);
 		compressor.Start();
 	}
 	//loader piston on flipper solenoid
-	void Autonomous(void) {
+	void Autonomous(void) 
+	{
 
 	}
 
-	void OperatorControl(void) {
+	void OperatorControl(void) 
+	{
 		Watchdog().SetEnabled(true);
 		DriverStationLCD *dsLCD = DriverStationLCD::GetInstance();
 		
@@ -77,91 +89,76 @@ public:
 		bool liftok= CAN_LIFT;
 		bool tiltok= CAN_TILT;
 
-		while (IsOperatorControl()) {
-			if (-.1 < joystick.GetRawAxis(3) && (joystick.GetRawAxis(3) < .1)) {
+		while (IsOperatorControl()) 
+		{
+			if (-.1 < joystick.GetRawAxis(3) && (joystick.GetRawAxis(3) < .1)) 
+			{
 				phi = 0;
-			} else {
+			} 
+			else 
+			{
 				phi = joystick.GetRawAxis(3);
 			}
 
 			leftJoyX = joystick.GetRawAxis(1);
 			leftJoyY = -joystick.GetRawAxis(2);
 			radius = sqrt(pow(leftJoyX, 2) + pow(leftJoyY, 2));
-
-			//i must be 0 or negative!!!
-			/*
-			 if (joystick2.GetRawButton(5)) {
-			 ptemp = pValue.GetAverageVoltage();
-			 itemp = iValue.GetAverageVoltage();
-			 dtemp = dValue.GetAverageVoltage();
-			 jagA.DisableControl();
-			 jagA.SetPID(ptemp, itemp, dtemp);
-			 jagA.EnableControl();
-			 jagB.DisableControl();
-			 jagB.SetPID(ptemp, itemp, dtemp);
-			 jagB.EnableControl();
-			 jagC.DisableControl();
-			 jagC.SetPID(ptemp, itemp, dtemp);
-			 jagC.EnableControl();
-			 jagD.DisableControl();
-			 jagD.SetPID(ptemp, itemp, dtemp);
-			 jagD.EnableControl();
-			 }
-			 */
+			
 			//Left joystick strafe tolerance
-			if ((-.1 < leftJoyX) && (leftJoyX < .1)) {
+			if ((-.1 < leftJoyX) && (leftJoyX < .1)) 
+			{
 				leftJoyX = 0;
 			}
-			if ((-.1 < leftJoyY) && (leftJoyY < .1)) {
+			if ((-.1 < leftJoyY) && (leftJoyY < .1)) 
+			{
 				leftJoyY = 0;
 			}
 
 			//theta NaN handling for X/Y axis movement and calculation
 			//Left stick - X axis
-			if ((leftJoyY == 0) && (leftJoyX != 0)) {
-				if (leftJoyX> 0) {
+			if ((leftJoyY == 0) && (leftJoyX != 0)) 
+			{
+				if (leftJoyX > 0) 
+				{
 					theta = 0;
-				} else if (leftJoyX < 0) {
+				} 
+				else if (leftJoyX < 0) 
+				{
 					theta = PI;
 				}
 				//Left stick - Y axis
-			} else if ((leftJoyX == 0) && (leftJoyY != 0)) {
-				if (leftJoyY> 0) {
+			} 
+			else if ((leftJoyX == 0) && (leftJoyY != 0)) 
+			{
+				if (leftJoyY > 0) 
+				{
 					theta = PI / 2;
-				} else if (leftJoyY < 0) {
+				} 
+				else if (leftJoyY < 0) 
+				{
 					theta = (3 * PI) / 2;
 				}
 				//No movement
-			} else if ((leftJoyY == 0) && (leftJoyX == 0)) {
+			} 
+			else if ((leftJoyY == 0) && (leftJoyX == 0)) 
+			{
 				theta = 0;
-			} else {
+			} 
+			else 
+			{
 				theta = atan((leftJoyY) / (leftJoyX));
 			}
 
 			//if in Quadrant 2 or 3 add 180 degrees, if in Quadrant 4 add 360
-			if (((leftJoyX < 0) && (leftJoyY> 0)) || ((leftJoyX < 0)
-					&& (leftJoyY < 0))) {
+			if (((leftJoyX < 0) && (leftJoyY > 0)) || ((leftJoyX < 0) && (leftJoyY < 0))) 
+			{
 				theta += PI;
-			} else if ((leftJoyX> 0) && (leftJoyY < 0)) {
+			} else if ((leftJoyX > 0) && (leftJoyY < 0)) 
+			{
 				theta += (2 * PI);
 			}
 
-			//Test drive buttons
-			/*
-			 if (joystick.GetRawButton(3)) {
-			 theta = 0;
-			 radius = .5;
-			 } else if (joystick.GetRawButton(4)) {
-			 theta = PI / 2;
-			 radius = .35;
-			 } else if (joystick.GetRawButton(1)) {
-			 theta = PI;
-			 radius = .5;
-			 } else if (joystick.GetRawButton(2)) {
-			 theta = (3 * PI) / 2;
-			 radius = .35;
-			 }
-			 */
+			
 
 			//Power equations
 			outA = ((radius) * (sin(theta + (PI / 4))) + phi);
@@ -177,46 +174,42 @@ public:
 
 			//Wait(.05);
 
-			if (tiltA.Get() == false && tiltB.Get() == true) {
-				if (armControl.GetRawButton(3) && liftok) //Lift Up/Extended			
-				{
-					liftA.Set(true); //Lift extends when button 3 is pressed and tilt is retracted.				
-					liftB.Set(false); //todo: Modify for mid lift pressing of buttons.				
-					tiltok = NO_TILT;
-				}
-				if (armControl.GetRawButton(2)) //Lift Down/Retracted			
-				{
-					liftA.Set(false);
-					liftB.Set(true);
-					tiltok = CAN_TILT;
-				}
+			
+			if (armControl.GetRawButton(3)) //Lift Up/Extended			
+			{
+				liftA.Set(true); //Lift extends when button 3 is pressed and tilt is retracted.				
+				liftB.Set(false); 				
 			}
-			if (liftA.Get() == false && liftB.Get() == true) {
-				if (armControl.GetRawButton(9) && tiltok) //Tilt Forward/Extended			
-				{
-					tiltA.Set(true); //Tilt retracts when button 9 is pressed and lift is retracted.				
-					tiltB.Set(false); //todo: Double check the location of the tilt pneumatic.				
-					liftok = NO_LIFT;
-				} else if (armControl.GetRawButton(8)) //Tilt Backward/Retracted			
-				{
-					tiltA.Set(false); //todo: Modify for mid tilt pressing of buttons.				
-					tiltB.Set(true);
-					liftok = CAN_LIFT;
-				}
+			if (armControl.GetRawButton(2)) //Lift Down/Retracted			
+			{
+				liftA.Set(false);
+				liftB.Set(true);
 			}
+			
+			
+			if (armControl.GetRawButton(9)) //Tilt Forward/Extended			
+			{
+				tiltA.Set(true); //Tilt retracts when button 9 is pressed and lift is retracted.				
+				tiltB.Set(false); 				
+			} 
+			else if (armControl.GetRawButton(8)) //Tilt Backward/Retracted			
+			{
+				tiltA.Set(false); 				
+				tiltB.Set(true);
+			}
+			
 			if (armControl.GetRawButton(1)) //Deploy Minibot/Extended		
 			{
 				clampA.Set(true); //Clamp opens when button 1 is pressed.			
 				clampB.Set(false);
-			} else {
+			} 
+			else 
+			{
 				clampA.Set(false);
 				clampB.Set(true);
 			}
 
-			//Diagnostics output
-			//printf("x: %f y: %f phi: %f\n", leftJoyX, leftJoyY, phi);
-			//printf("a: %f b: %f c: %f d: %f\n", jagA.Get(), jagB.Get(), jagC.Get(), jagD.Get());
-			//printf("theta: %f radius: %f\n", theta, radius);
+			
 
 			//normal debug output (in competition) shooter and lifter info feedback
 
