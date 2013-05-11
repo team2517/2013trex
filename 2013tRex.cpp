@@ -49,9 +49,9 @@ public:
 
 				joystick(1),
 				armControl(2),
-				jagA(11), //invert
-				jagB(10), //invert
-				jagC(6), jagD(3), encoder(1), pValue(2), iValue(3), dValue(4),
+				jagA(5), //invert
+				jagB(2), //invert
+				jagC(30), jagD(45), encoder(1), pValue(2), iValue(3), dValue(4),
 				compressor(1, 1), tiltA(1), tiltB(2), liftA(3), liftB(4),
 				clampA(5), clampB(6)
 
