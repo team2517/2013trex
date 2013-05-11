@@ -29,7 +29,6 @@ class DefaultRobot : public SimpleRobot {
 	Solenoid clampA; //The pneumatic at the end of the arm that controls the clamp.	
 	Solenoid clampB;
 	Compressor compressor;
-	int maxPower;
 	double theta;
 	double radius;
 	double phi;
@@ -71,35 +70,9 @@ public:
 	void OperatorControl(void) {
 		Watchdog().SetEnabled(true);
 		DriverStationLCD *dsLCD = DriverStationLCD::GetInstance();
-		double ptemp=3.0;
-		double itemp=0.0;
-		double dtemp=0.0;
-		jagA.ChangeControlMode(jagA.kSpeed);
-		jagA.ConfigEncoderCodesPerRev(250);
-		jagA.SetSpeedReference(CANJaguar::kSpeedRef_Encoder);
-		jagA.SetPID(1.37, 0.0, 5);
-		jagA.EnableControl();
-		Watchdog().Feed();
-		jagB.ChangeControlMode(jagB.kSpeed);
-		jagB.ConfigEncoderCodesPerRev(250);
-		jagB.SetSpeedReference(CANJaguar::kSpeedRef_Encoder);
-		jagB.SetPID(1.37, 0.0, 5);
-		jagB.EnableControl();
-		Watchdog().Feed();
-		jagC.ChangeControlMode(jagC.kSpeed);
-		jagC.ConfigEncoderCodesPerRev(250);
-		jagC.SetSpeedReference(CANJaguar::kSpeedRef_Encoder);
-		jagC.SetPID(1.37, 0.0, 5);
-		jagC.EnableControl();
-		Watchdog().Feed();
-		jagD.ChangeControlMode(jagD.kSpeed);
-		jagD.ConfigEncoderCodesPerRev(250);
-		jagD.SetSpeedReference(CANJaguar::kSpeedRef_Encoder);
-		jagD.SetPID(1.37, 0.0, 5);
-		jagD.EnableControl();
+		
 
 		Watchdog().Feed();
-		maxPower = 275;
 
 		bool liftok= CAN_LIFT;
 		bool tiltok= CAN_TILT;
@@ -191,10 +164,10 @@ public:
 			 */
 
 			//Power equations
-			outA = ((radius) * (sin(theta + (PI / 4))) + phi) * maxPower;
-			outB = ((radius) * (cos(theta + (PI / 4))) + phi) * maxPower;
-			outC = ((radius) * (cos(theta + (PI / 4))) - phi) * maxPower;
-			outD = ((radius) * (sin(theta + (PI / 4))) - phi) * maxPower;
+			outA = ((radius) * (sin(theta + (PI / 4))) + phi);
+			outB = ((radius) * (cos(theta + (PI / 4))) + phi);
+			outC = ((radius) * (cos(theta + (PI / 4))) - phi);
+			outD = ((radius) * (sin(theta + (PI / 4))) - phi);
 
 			//Output to motors
 			jagA.Set(normalizePower(outA));
@@ -275,7 +248,10 @@ float normalizePower(float power)
 	{
 		power = -1;
 	}
+	
+	return power;
 }
+
 START_ROBOT_CLASS(DefaultRobot)
 ;
 
