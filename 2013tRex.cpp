@@ -7,6 +7,10 @@
 #define NO_LIFT 			false//The lift can't move legally.
 #define CAN_TILT			true //The tilt can move legaly.
 #define NO_TILT				false//The tilt can't move legaly
+
+float normalizePower(float);
+
+
 class DefaultRobot : public SimpleRobot {
 	Joystick joystick;
 	Joystick armControl;
@@ -193,34 +197,10 @@ public:
 			outD = ((radius) * (sin(theta + (PI / 4))) - phi) * maxPower;
 
 			//Output to motors
-			if (outA> maxPower) {
-				jagA.Set(-maxPower);
-			} else if (outA < -maxPower) {
-				jagA.Set(maxPower);
-			} else {
-				jagA.Set(-outA);
-			}
-			if (outB> maxPower) {
-				jagB.Set(-maxPower);
-			} else if (outB < -maxPower) {
-				jagB.Set(maxPower);
-			} else {
-				jagB.Set(-outB);
-			}
-			if (outC> maxPower) {
-				jagC.Set(maxPower);
-			} else if (outC < -maxPower) {
-				jagC.Set(-maxPower);
-			} else {
-				jagC.Set(outC);
-			}
-			if (outD> maxPower) {
-				jagD.Set(maxPower);
-			} else if (outD < -maxPower) {
-				jagD.Set(-maxPower);
-			} else {
-				jagD.Set(outD);
-			}
+			jagA.Set(normalizePower(outA));
+			jagB.Set(normalizePower(outB));
+			jagC.Set(normalizePower(outC));
+			jagD.Set(normalizePower(outD));
 
 			//Wait(.05);
 
@@ -285,6 +265,17 @@ public:
 	}
 };
 
+float normalizePower(float power)
+{
+	if(power > 1)
+	{
+		power = 1;
+	}
+	else if(power < -1)
+	{
+		power = -1;
+	}
+}
 START_ROBOT_CLASS(DefaultRobot)
 ;
 
