@@ -147,8 +147,8 @@ public:
 			//Power equations
 			outA = ((radius) * (sin(theta + (PI / 4))) + phi);
 			outB = ((radius) * (cos(theta + (PI / 4))) + phi);
-			outC = ((radius) * (cos(theta + (PI / 4))) - phi);
-			outD = ((radius) * (sin(theta + (PI / 4))) - phi);
+			outC = -((radius) * (cos(theta + (PI / 4))) - phi);
+			outD = -((radius) * (sin(theta + (PI / 4))) - phi);
 
 			//Output to motors
 			jagA.Set(normalizePower(outA));
