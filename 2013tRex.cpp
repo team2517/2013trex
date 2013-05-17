@@ -33,21 +33,21 @@ class DefaultRobot : public SimpleRobot {
 public:
 	DefaultRobot(void) :
 				/*
-				 * 3 = green   = d = rear right 
-				 * 6 = red     = c = rear left
-				 * 11 = white  = a = front left
-				 * 10 = yellow = b = front right
 				 * 
-				 * hopper gate solenoid have placeholder values
+				 * 
+				 * 45 = d = rear right 
+				 * 30 = c = rear left
+				 * 5 = a = front left
+				 * 2 = b = front right
 				 */
 
 				joystick(1),
 				armControl(2),
-				jagA(5), //invert
-				jagB(2), //invert
+				jagA(5), 
+				jagB(2), 
 				jagC(30), 
 				jagD(45), 
-				compressor(1, 1), 
+				compressor(1, 3), 
 				tiltA(1), 
 				tiltB(2), 
 				liftA(3), 
@@ -59,7 +59,6 @@ public:
 		Watchdog().SetExpiration(1);
 		compressor.Start();
 	}
-	//loader piston on flipper solenoid
 	void Autonomous(void) 
 	{
 
